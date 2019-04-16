@@ -18,15 +18,15 @@ How to use csv2tlxml.py to convert csv file to TestLink XML
         -v VALIDATE_XML, --validate-xml VALIDATE_XML
                                 validate the xml format
   
-If the TestLink XML file is generated with the parent test suite name provided with "-s", the parent test suite will be created under the selected test suite and the test suites of test cases from csv file will be imported under the newly created parent test suite in TestLink
+- If the TestLink XML file is generated with the parent test suite name provided with "-s", the parent test suite will be created under the selected test suite and the test suites of test cases from csv file will be imported under the newly created parent test suite in TestLink
 
       $ python csv2tlxml.py -c [CSV_FILE_PATH] -s [NEW_PARENT_TESTSUITE_NAME]
 
-If the TestLink XML file is generated without the parent test suite name, the test suites of test cases from csv file will be imported under the selected parent test suite in TestLink
+- If the TestLink XML file is generated without the parent test suite name, the test suites of test cases from csv file will be imported under the selected parent test suite in TestLink
 
-      $ python csv2tlxml.py -c [CSV_FILE_PATH] -s [NEW_PARENT_TESTSUITE_NAME]
+      $ python csv2tlxml.py -c [CSV_FILE_PATH]
 
-To validate the existing TestLink XML format
+- To validate the existing TestLink XML format
 
       $ python csv2tlxml.py -v [XML_FILE_PATH]
 
