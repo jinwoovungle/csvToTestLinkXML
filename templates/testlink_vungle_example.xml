@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite id="" name="New_TestSuite" >
+<node_order><![CDATA[]]></node_order>
+<details><![CDATA[]]></details>
+<testsuite id="" name="TS11" >
+	<node_order><![CDATA[1]]></node_order>
+	<details><![CDATA[]]></details>
+<testcase internalid="" name="test_child">
+	<node_order><![CDATA[1000]]></node_order>
+	<externalid><![CDATA[]]></externalid>
+	<version><![CDATA[1]]></version>
+	<summary><![CDATA[<p>summarize this</p>]]></summary>
+	<preconditions><![CDATA[<p>none</p>]]></preconditions>
+	<execution_type><![CDATA[1]]></execution_type>
+	<estimated_exec_duration></estimated_exec_duration>
+	<status>1</status>
+	<is_open>1</is_open>
+	<active>1</active>
+<steps>
+<step>
+	<step_number><![CDATA[1]]></step_number>
+	<actions><![CDATA[<p>do something</p>]]></actions>
+	<expectedresults><![CDATA[<p>stuff happens</p>]]></expectedresults>
+	<execution_type><![CDATA[1]]></execution_type>
+	</step>
+</steps>
+</testcase>
+<testcase internalid="" name="west_child">
+	<node_order><![CDATA[1000]]></node_order>
+	<externalid><![CDATA[]]></externalid>
+	<version><![CDATA[1]]></version>
+	<summary><![CDATA[<p>summarize this</p>]]></summary>
+	<preconditions><![CDATA[<p>be alive</p>]]></preconditions>
+	<execution_type><![CDATA[2]]></execution_type>
+	<estimated_exec_duration></estimated_exec_duration>
+	<status>1</status>
+	<is_open>1</is_open>
+	<active>1</active>
+<steps>
+<step>
+	<step_number><![CDATA[1]]></step_number>
+	<actions><![CDATA[<p>another stuff 2</p>]]></actions>
+	<expectedresults><![CDATA[<p>stuff happens 2</p>]]></expectedresults>
+	<execution_type><![CDATA[2]]></execution_type>
+	</step>
+</steps>
+</testcase>
+</testsuite>
+<testsuite id="" name="TS22" >
+	<node_order><![CDATA[1]]></node_order>
+	<details><![CDATA[]]></details>
+<testcase internalid="" name="lest_child">
+	<node_order><![CDATA[1000]]></node_order>
+	<externalid><![CDATA[]]></externalid>
+	<version><![CDATA[1]]></version>
+	<summary><![CDATA[<p></p>]]></summary>
+	<preconditions><![CDATA[<p>be not alive</p>]]></preconditions>
+	<execution_type><![CDATA[1]]></execution_type>
+	<estimated_exec_duration></estimated_exec_duration>
+	<status>1</status>
+	<is_open>1</is_open>
+	<active>1</active>
+<steps>
+<step>
+	<step_number><![CDATA[1]]></step_number>
+	<actions><![CDATA[<p>something else 3</p>]]></actions>
+	<expectedresults><![CDATA[<p>other stuff 3</p>]]></expectedresults>
+	<execution_type><![CDATA[1]]></execution_type>
+	</step>
+</steps>
+</testcase>
+</testsuite>
+<testsuite id="" name="TS33" >
+	<node_order><![CDATA[1]]></node_order>
+	<details><![CDATA[]]></details>
+<testcase internalid="" name="crest_child">
+	<node_order><![CDATA[1000]]></node_order>
+	<externalid><![CDATA[]]></externalid>
+	<version><![CDATA[1]]></version>
+	<summary><![CDATA[<p></p>]]></summary>
+	<preconditions><![CDATA[<p>have a beer in hand</p>]]></preconditions>
+	<execution_type><![CDATA[2]]></execution_type>
+	<estimated_exec_duration></estimated_exec_duration>
+	<status>1</status>
+	<is_open>1</is_open>
+	<active>1</active>
+<steps>
+<step>
+	<step_number><![CDATA[1]]></step_number>
+	<actions><![CDATA[<p>Stuff 4</p>]]></actions>
+	<expectedresults><![CDATA[<p>Happen 4</p>]]></expectedresults>
+	<execution_type><![CDATA[2]]></execution_type>
+	</step>
+</steps>
+</testcase>
+</testsuite>
+</testsuite>

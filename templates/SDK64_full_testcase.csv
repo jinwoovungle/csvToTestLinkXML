@@ -1,0 +1,1316 @@
+test_suite,TC#,name,summary,preconditions,ad_types,steps,expected_results,test type,importance,status,execution_type
+Ad Initialization,BSFN-1,fresh initialization after app installation,to verify fresh initialization after app installation,fresh installation,all ad types,"1. install the test app
+ 2. type in the vaild App ID and HostAPI
+ 3. initialize the app
+ 4. try to load multiple non-autocacheable ads","/new API is called successfully
+ /config API is called successfully
+ all active placements are listed in test app
+ auto-cacheable placements complete in auto-caching
+ ad loads work successfully",Basic,2,1,1
+Ad Initialization,BSFN-2,the successful initialization with the valid app ID and valid hostAPI,to verify the successful initialization with the valid app ID and valid hostAPI,,all ad types,"1. close the test app
+ 2. type in the vaild App ID and HostAPI
+ 3. initialize the app
+ 4. try to load multiple non-autocacheable ads","/config API is called successfully
+ all active placements are listed in test app
+ auto-cacheable placements complete in auto-caching
+ cached placements are playable
+ ad loads work successfully",Basic,2,1,1
+Ad Initialization,BSFN-3,/config API request payload,to verify /config API request payload,,any,"1. initialize the app
+ 2. observe /config request API payload",all information exists in /config request API payload,Basic,2,1,1
+Ad Initialization,BSFN-4,the cached ad after re-initialization,to verify the cached ad after re-initialization,,all ad types,"1. initialize the app
+ 2. load multiple non-autocacheable placements and auto-cacheable placements
+ 3. close the test app
+ 4. type in the vaild App ID and HostAPI
+ 5. initialize the app
+ 6. observe the cached placements are playable","the cached placements should be playable without reloading the ad.
+ the cached auto-cacheable placements should not be auto-cached.",Functional,2,1,1
+Ad Initialization,BSFN-5,re-initialization after refresh timeout,to verify re-initialization after refresh timeout,short refresh_time,all ad types,"1. initialize the app
+ 2. wait for ""refresh_time""
+ 3. observe /config API is called","/config API is called successfully after refresh_time times out
+ all active placements are listed in test app",Functional,2,1,1
+Ad Initialization,BSFN-6,the failure of initialization with invalid HostAPI,to verify the failure of initialization with invalid HostAPI,"invalid HostAPI
+ inactive HostAPI",any,"1. initialize the test app with the invalid HostAPI
+ 2. repeat with inactive HostAPI",Initialization fails and SDK should display error message,Negative,2,1,1
+Ad Initialization,BSFN-7,the failure of initialization with invalid AppID,to verify the failure of initialization with invalid AppID,"invalid AppID
+ inactive AppID",any,"1. initialize the test app with the invalid HostAPI
+ 2. repeat with inactive HostAPI",Initialization fails and SDK should display error message,Negative,2,1,1
+Ad Initialization,BSFN-8,the initialization of zero placement app,to verify the initialization of zero placement app,zero placement App,any,1. initialize the app,"No placement lists in /config response API payload
+ no placement lists in test app",Boundary,2,1,1
+Ad Initialization,BSFN-9,the initialization of inactive placement,to verify the initialization of inactive placement,multiple inactive placements,all ad types,1. initialize the app,inactive placement are not listed in /config response API payload nor available in test app,Functional,2,1,1
+Ad Initialization,BSFN-10,the initilization in background,to verify the initilization in background,,all ad types,"1. initialize the app
+ 2. put the app in background",initialization works successfully in background,Interruption,2,1,1
+Ad Initialization,BSFN-11,the updated placement list,to verify the updated placement list,,all ad types,"1. initialize the app
+ 2. update the status of placements in Dashboard (active <-> inactive, auto-cacheable <-> non auto-cacheable)
+ 3. wait for 10 mins to apply the update in Dashboard
+ 4. close and reinitialize the app","placements status in /config response API payload is updated
+ auto-cacheable ad is auto-cached 
+ inactive placements are not listed
+ cached ads are still playable",Functional,2,1,1
+Load Ad,BSFN-12,all types of ad loading,to verify all types of ad loading,"auto-cacheable all ad types
+ non auto-cacheable all ad types",all ad types,"1. initialize the app
+ 2. load ad and auto-cache
+ 3. observe /ads API call and asset downloading","all types of ads load successful by manual and auto-cache
+ /ads API is called
+ placement ID should be matched
+ all listed assets must be stored",Basic,2,1,1
+Load Ad,BSFN-13,the URLs of TPATs,to verify the URLs of TPATs,the multiple URLs in a TPAT,all ad types,"1. initialize the app
+ 2. load ad and auto-cache
+ 3. observe /ads response API payload","TPAT Urls are available in /ads response payload
+ - percentage TPATs
+ - mute/unmute TPATs
+ - video_close TPAT
+ - postroll_click TPAT
+ - postroll_view TPAT",Basic,2,1,1
+Load Ad,BSFN-14,asset list,to verify asset list,,all ad types,"1. initialize the app
+ 2. load ad and auto-cache
+ 3. observe /ads response API payload - assets","the correct URLs of all listed assets are called and the assets are loaded successfully 
+ - post_bundle
+ - video url
+ - dynamic template contents",Basic,2,1,1
+Load Ad,BSFN-15,cta_overlay (legacy only),to verify cta_overlay (legacy only),,Legacy,"1. initialize the app
+ 2. load ad and auto-cache
+ 3. observe /ads response API payload - cta_overlay","""enabled"", and ""click_area"" exist in ""cta_overlay""",Functional,2,1,1
+Load Ad,BSFN-16,"""delay""","to verify ""delay""","set ""delay"" to 10/20 seconds in /ads response payload",all ad types,,the next ad loads with delay,Functional,2,1,1
+Load Ad,BSFN-17,reload the ad after sleep timeout,to verify reload the ad after sleep timeout,sleep response,all ad types,,"- ad asset download in sleep
+ - no callback for ad load
+ - download after sleep timeout",Functional,2,1,1
+Play Ad,BSFN-18,/will_play_ad API call,to verify /will_play_ad API call,,all ad types,"1. initialize the ad
+ 2. load each ad type
+ 3. play each ad type","SDK calls /will_play_ad as soon as the ad starts to play.
+ exceptions by ad type and OS platform:
+ iOS : MREC, FF, FV: no /will_play_ad API call is fired
+ Android: FF, MREC : no /will_play_ad API call is fired",Basic,2,1,1
+Play Ad,BSFN-19,load ad and play ad at the same time,to verify load ad and play ad at the same time,,all ad types,"1. initialize the ad
+ 2. load multiple ads
+ 3. while the ads are loading, play an ad
+ 4. close the ad
+ 5. play the loaded ads","ad loading continues while the ad plays
+ the loaded ads are playable",Functional,2,1,1
+Play Ad,BSFN-20,/report_ad after video is closed,to verify /report_ad after video is closed,,all ad types,"1. initialize the ad
+ 2. load each ad types
+ 3. play each ad type
+ 4. close the ad",/report_ad is called when the ad is closed,Basic,2,1,1
+Play Ad,BSFN-21,the playback in airplane mode,to verify the playback in airplane mode,,all ad types,"1. initialize the ad
+ 2. load each ad types
+ 3. put the device in airplain mode
+ 3. play each ad type",ad playback must be done,Functional,2,1,1
+Play ad - TPAT,BSFN-22,play_percentage TPATs,to verify play_percentage TPATs,single or an array of URLs in play_percentage TPAT,all ad types,"1. initialize the ad
+ 2. load each ad types
+ 3. play each ad type
+ 4. Observe play_percentage TPATs are called","all TPATs in the array of each play_percentage must be fired
+ The play percentage of TPAT call matches to video play progress",Basic,2,1,1
+Play ad - TPAT,BSFN-23,POSTROLL_VIEW,to verify POSTROLL_VIEW,single or an array of URLs in postroll.view TPAT,all ad types,"1. initialize the ad
+ 2. load each ad types
+ 3. play each ad type
+ 4. move to postroll view page (ex> endcard)","Single page ad: POSTROLL_VIEW is fired when the ad is played
+ Multi Page Ad: POSTROLL_VIEW is fired when the ad moves to Endcard",Basic,2,1,1
+Play ad - TPAT,BSFN-24,VIDEO_MUTE/VIDEO_UNMUTE,to verify VIDEO_MUTE/VIDEO_UNMUTE,"single or an array of URLs in video.mute TPAT
+ single or an array of URLs in video.unmute TPAT",all ad types,"1. initialize the ad
+ 2. load each ad types
+ 3. play each ad type
+ 4. turn on / off the mute on video multiple times","video.mute TPAT must be fired when the mute is set ON
+ video.unmute TPAT must be fired when the mute is set OFF",Basic,2,1,1
+Play ad - TPAT,BSFN-25,VIDEO_CLOSE,to verify VIDEO_CLOSE,single or an array of URLs in video.close,all ad types,"1. initialize the ad
+ 2. load each ad types
+ 3. play each ad type
+ 4. close the video while it plays",video.close TPAT must be fired,Basic,2,1,1
+Play ad - TPAT,BSFN-26,POSTROLL_CLICK on POSTROLL_VIEW,to verify POSTROLL_CLICK on POSTROLL_VIEW,single or an array of URLs in postroll.click TPAT,all ad types,"1. initialize the ad
+ 2. load each ad types
+ 3. play each ad type
+ 4. Click CTA button","- all TPATs in postroll.click must be fired
+ - the ad is dismissed when it returns from appstore
+ - MREC and FF continue displaying the ad when it returns from appstore",Basic,2,1,1
+Play ad - TPAT,BSFN-27,POSTROLL_CLICK on Video playing - Legacy Ad,to verify POSTROLL_CLICK on Video playing - Legacy Ad,single or an array of URLs in postroll.click TPAT,legacy ad,"1. initialize the ad
+ 2. load each ad types
+ 3. play each ad type
+ 4. click the cta_overlay clickable area","- all TPATs in postroll.click must be fired at least one time
+ - the video resumes when it returns",Basic,2,1,1
+Play Ad - cta_overlay - legacy,BSFN-28,CTA overlay enabled true and click_area 0,CTA overlay enabled true and click_area 0,"""enabled"": true,
+ ""click_area"": 0",legacy ad,"1. rewrite ""cta_overlay"" properties with 
+ ""enabled"": true,
+ ""click_area"": 0
+ 2. load the ad
+ 3. play the ad","- CTA button is not displayed
+ - video screen is not clickable",Functional,2,1,1
+Play Ad - cta_overlay - legacy,BSFN-29,CTA overlay enabled false and click_area 0,CTA overlay enabled false and click_area 0,"""enabled"": false,
+ ""click_area"": 0",legacy ad,"1. rewrite ""cta_overlay"" properties with 
+ ""enabled"": false,
+ ""click_area"": 0
+ 2. load the ad
+ 3. play the ad","- CTA button is not displayed
+ - video screen is not clickable",Functional,2,1,1
+Play Ad - cta_overlay - legacy,BSFN-30,CTA overlay enabled true and click_area 1,CTA overlay enabled true and click_area 1,"""enabled"": true,
+ ""click_area"": 1",legacy ad,"1. rewrite ""cta_overlay"" properties with 
+ ""enabled"": true,
+ ""click_area"": 1
+ 2. load the ad
+ 3. play the ad","- CTA button is displayed
+ - video screen is clickable",Functional,2,1,1
+Play Ad - cta_overlay - legacy,BSFN-31,CTA overlay enabled false and click_area 1,CTA overlay enabled false and click_area 1,"""enabled"": false,
+ ""click_area"": 1",legacy ad,"1. rewrite ""cta_overlay"" properties with 
+ ""enabled"": false,
+ ""click_area"": 1
+ 2. load the ad
+ 3. play the ad","- CTA button is not displayed
+ - video screen is clickable",Functional,2,1,1
+Play Ad - cta_overlay - legacy,BSFN-32,CTA overlay Unused keys and values,CTA overlay Unused keys and values,"""show_onclick"": false,
+ ""time_enabled"": 0,
+ ""time_show"": 0,",legacy ad,1. load the ad,"""show_onclick"": false,
+ ""time_enabled"": 0,
+ ""time_show"": 0,
+ should not be impact on CTA button existence and clickable area",Functional,2,1,1
+Play Ad - cta_overlay click (pause and resume),BSFN-33,click the clickable area to pause and back to ad to resume the video,"click the clickable area to pause and back to ad to resume the video
+ - between 0 ~ 0.25
+ - between 0.25 ~ 0.5
+ - between 0.5 ~ 0.75
+ - between 0.75 ~ 1","""cta_overlay"": {""enabled"": true,
+ ""click_area"": 1}",legacy ad,"1. load ad
+ 2. play ad
+ 3. observe the play percentage tpat
+ 4. click the clickable area to launch the CTA Url at each condition below
+ - between 0 ~ 0.25
+ - between 0.25 ~ 0.5
+ - between 0.5 ~ 0.75
+ - between 0.75 ~ 1
+ 5. return to the ad video","- it launches CTA url through storekit/app store successfully
+ - the video resumes successfully when it returns to the ad page
+ - TPAT must be fired successfully in order",Basic,2,1,1
+Play Ad - cta_overlay click (pause and resume),BSFN-34,CTA Url with App ID launches through storekit,CTA Url with App ID launches through storekit,"""cta_overlay"": {""enabled"": true,
+ ""click_area"": 1}
+ CTA Url with app id",legacy ad,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url with App ID on StoreKit 
+ 4. return to the ad video","- it launches CTA url through storekit successfully
+ - the video resumes successfully when it returns to the ad page
+ - TPAT must be fired successfully in order",Functional,2,1,1
+Play Ad - cta_overlay click (pause and resume),BSFN-35,CTA Url with App ID launches through storekit multiple times,CTA Url with App ID launches through storekit multiple times,"""cta_overlay"": {""enabled"": true,
+ ""click_area"": 1}
+ CTA Url with app id",legacy ad,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url with App ID on StoreKit 
+ 4. return to the ad video
+ 5. repeat step 3-4","- it launches CTA url through storekit successfully
+ - the video resumes successfully when it returns to the ad page
+ - TPAT must be fired successfully in order",Functional,2,1,1
+Play Ad - cta_overlay click (pause and resume),BSFN-36,CTA Url without App ID launches through browser,CTA Url without App ID launches through browser,"""cta_overlay"": {""enabled"": true,
+ ""click_area"": 1}
+ CTA Url without app id",legacy ad,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url without App ID on browser
+ 4. return to the ad video","- it launches CTA url through browser successfully
+ - the video resumes successfully when it returns to the ad page
+ - TPAT must be fired successfully in order",Functional,2,1,1
+Play Ad - cta_overlay click (pause and resume),BSFN-37,CTA Url without App ID launches through browser multiple times,CTA Url without App ID launches through browser multiple times,"""cta_overlay"": {""enabled"": true,
+ ""click_area"": 1}
+ CTA Url without app id",legacy ad,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url without App ID on browser
+ 4. return to the ad video
+ 5. repeat step 3-4","- it launches CTA url through browser successfully
+ - the video resumes successfully when it returns to the ad page
+ - TPAT must be fired successfully in order",Functional,2,1,1
+Play Ad - cta_overlay click (pause and resume),BSFN-38,pause and resume on the ad without Endcard,to verify pause and resume on the ad without Endcard,"""cta_overlay"": {""enabled"": true,
+ ""click_area"": 1}
+ No Endcard",legacy ad,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url
+ 4. return to the ad video","- it launches CTA url through browser successfully
+ - the video resumes successfully when it returns to the ad page
+ - TPAT must be fired successfully in order",Boundary,2,1,1
+Play Ad - cta_overlay click (pause and resume),BSFN-39,Bring the ad to foreground instead of returning to the ad by clicking button on AppStore - Video,Bring the ad to foreground instead of returning to the ad by clicking button on AppStore - Video,"""cta_overlay"": {""enabled"": true,
+ ""click_area"": 1}
+ CTA Url without app id",legacy ad,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url without App ID through Browser
+ 4. bring the ad in foreground",- The video resumes when the ad is launched in foreground,Boundary,2,1,1
+Play Ad - cta_overlay click (pause and resume),BSFN-40,Kill browser during the video play is paused,Kill browser during the video play is paused,"""cta_overlay"": {""enabled"": true,
+ ""click_area"": 1}",legacy ad,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url without app ID through browser
+ 4. kill the browser
+ 5. bring the ad in foreground",- The video resumes when the ad is launched in foreground,Negative,2,1,1
+Play Ad - cta_overlay click (pause and resume),BSFN-41,Kill app store on EndCard,Kill app store on EndCard,"""cta_overlay"": {""enabled"": true,
+ ""click_area"": 1}",legacy ad,"1. load ad
+ 2. play ad
+ 3. wait until it moves to EndCard
+ 4. click CTA button to launch the CTA Url through App Store
+ 5. Kill the app store",The ad is closed when the CTA button is clicked on EndCard,Negative,2,1,1
+Play Ad - cta_overlay click (pause and resume),BSFN-42,pause and resume with no postbundle ad,to verify pause and resume with no postbundle ad,set Creatives without EndCard,legacy ad,"1. load the legacy ad without postbundle
+ 2. play ad
+ 3. click cta_overlay clickable area on video","CTA is clicked and opens storekit, appstore, browser
+ Video resumes when it returns to ad playback page
+ POSTROLL_CLICK TPAT is fired",Negative,2,1,1
+Play Ad - cta_overlay click (pause and resume),BSFN-43,the contents of userActions and clickedThrough for cta_overlay,to verify the contents of userActions and clickedThrough for cta_overlay,"""cta_overlay"": {""enabled"": true,
+ ""click_area"": 1}",legacy ad,"1. load ad
+ 2. play ad
+ 3. try multiple CTA clickable area click on video
+ 4. Close the ad
+ 5. Observe /report_ad","the same number of ""cta"" is included in ""userActions"" and ""clickedThrough""
+ /report_ad request payload must have ""userAction"" information
+ ""userAction"" and ""clickThrough"" must be matched",Basic,2,1,1
+Play Ad - Mute/Unmute,BSFN-44,start video play on mute,to verify start video play on mute,set option as MUTE,all ad types,"1. load ad
+ 2. play ad",Ad video plays with Mute ON,Functional,2,1,1
+Play Ad - Mute/Unmute,BSFN-45,start video play on unmute,to verify start video play on unmute,set option as UNMUTE,all ad types,"1. load ad
+ 2. play ad",Ad video plays with Mute OFF,Functional,2,1,1
+Play Ad - Mute/Unmute,BSFN-46,the volume change on Mute state,to verify the volume change on Mute state,set option as MUTE,all ad types,"1. load ad
+ 2. play ad
+ 3. change the volume",Persist in Mute state,Functional,2,1,1
+Play Ad - Orientation,BSFN-47,the video orientation in portrait view only,to verify the video orientation in portrait view only,set Orientation Lock to Portrait,all ad types,"1. load ad
+ 2. Play the ad
+ 3. toggle the orientation while the ad plays",- video displays in portrait view only,Functional,2,1,1
+Play Ad - Orientation,BSFN-48,the video orientation in landscape view only,to verify the video orientation in landscape view only,set Orientation Lock to Landscape,all ad types,"1. load ad
+ 2. Play the ad
+ 3. toggle the orientation while the ad plays",- video displays in landscape view only,Functional,2,1,1
+Play Ad - Orientation,BSFN-49,the video orientation in both,to verify the video orientation in both,"set Orientation Lock to Unknown
+ set ""video orientation override"" to ""both"" in placement",all ad types,"1. load ad
+ 2. Play the ad
+ 3. toggle the orientation while the ad plays",- video orientation toggles between landscape view and portrait view by the device orientation change,Functional,2,1,1
+Play Ad - Progress bar,BSFN-50,progress bar while the video is playing,progress bar while the video is playing,,all ad types,"1. load ad
+ 2. Play the ad
+ 3. observe the video",- progress bar syncs with the video play progress,Basic,2,1,1
+Play Ad - Progress bar,BSFN-51,progress bar sync after device feature interruptions,"progress bar sync when
+ - the device is locked and unlocked
+ - background/foreground
+ - pause and resume by CTA click",,all ad types,"1. load ad
+ 2. Play the ad
+ 3. observe the video
+ 4. interrupt the video playback by device lock, background, cta_overlay click.
+ 5. relaunch the video playback",- progress bar syncs with the video play progress when it is relaunched,interruption,2,1,1
+Play Ad - Close Video,BSFN-52,close button with showClose 0,"close button - ""showClose"" : 0","""showClose"" : 0",all ad types,"1. load each ad
+ 2. play each ad
+ 3. observe Close button","- display ""Close"" button when the video starts",Boundary,2,1,1
+Play Ad - Close Video,BSFN-53,close button with showClose less than the length of video,"close button - ""showClose"" : < the length of video","""showClose"" : < the length of video",all ad types,"1. load each ad
+ 2. play each ad
+ 3. observe Close button","- display ""Close"" button after the defined time",Functional,2,1,1
+Play Ad - Close Video,BSFN-54,close button with showClose longer than the length of video,"close button - ""showClose"" : > the length of video","""showClose"" : > the length of video",all ad types,"1. load each ad
+ 2. play each ad
+ 3. observe Close button","- ""close"" button never show",Functional,2,1,1
+Play Ad - Close Video,BSFN-55,incentized Close,incentized Close,incentized enabled,legacy ad,"1. load the incentivized ad
+ 2. play the ad
+ 3. observe Close button
+ 4. click close button on Video",- it pops up the alert message with the predefined incentized text,Functional,2,1,1
+Plad Ad - FlexView,BSFN-56,FlexView Timeout - none,to verify FlexView Timeout - none,set FlexView Timeout to none,FlexView,"1. load the FlexView Ad
+ 2. Play the ad",the ad does not time out,Boundary,2,1,1
+Plad Ad - FlexView,BSFN-57,FlexView Timeout - shorter than vidoe length,to verify FlexView Timeout - shorter than vidoe length,set FlexView Timeout to shorter than the video length,FlexView,"1. load the FlexView Ad
+ 2. Play the ad",the ad dismisses during the video is playing,Functional,2,1,1
+Plad Ad - FlexView,BSFN-58,FlexView Timeout - interrupt before the timeout,to verify FlexView Timeout - interrupt before the timeout,set FlexView Timeout,FlexView,"1. load the FlexView Ad
+ 2. Play the ad
+ 3. Click CTA button before the timeout",the ad dismisses when CTA is clicked before time out,Interruption,2,1,1
+Play Ad - Moat,BSFN-59,MOAT enabled,MOAT enabled,Set MOAT enabled in campaign,legacy ad,"1. load ad with MOAT enabled
+ 2. play the ad
+ 3. observe moat log and moat site update","/ads respnonse shows 
+ ""tpat""-> ""moat"" -> ""is_enabled"": true
+ MOAT log is generated",Functional,2,1,1
+Play Ad - Moat,BSFN-60,MOAT disabled,MOAT disabled,Set MOAT disabled in campaign,legacy ad,"1. load ad with MOAT enabled
+ 2. play the ad
+ 3. observe moat log and moat site update","/ads respnonse shows 
+ ""tpat""-> ""moat"" -> ""is_enabled"": false
+ MOAT log is not generated",Functional,2,1,1
+Play Ad - Moat,BSFN-61,MOAT track - audio levels,MOAT track - audio levels,Set MOAT enabled in campaign,legacy ad,"1. load ad with MOAT enabled
+ 2. play the ad
+ 3. change the volume of the video
+ 3. observe moat log and moat site update",the volume level in MOAT log is updated,Functional,2,1,1
+Play Ad - Moat,BSFN-62,MOAT track - video start,MOAT track - video start,Set MOAT enabled in campaign,legacy ad,"1. load ad with MOAT enabled
+ 2. play the ad
+ 3. observe moat log and moat site update",MOAT log contains the video start log,Functional,2,1,1
+Play Ad - Moat,BSFN-63,MOAT track - video quartile levels,MOAT track - video quartile levels,Set MOAT enabled in campaign,legacy ad,"1. load ad with MOAT enabled
+ 2. play the ad
+ 3. observe moat log and moat site update",MOAT log updates video quartile level,Functional,2,1,1
+Play Ad - incentivized ad,BSFN-64,the default incentivized text,to verify the default incentivized text,"Set incentivized title, button and message in platform",incentivized ad of both legacy and MRAID,"1. load the incentivized ad
+ 2. while the video is played, close the video
+ 3. observe the popup
+ 4. click ""continue"" or ""close""","the incentivized popup is displayed with continue and close button
+ all text strings in the popup match with the information in /ads payload
+ when continue is clicked, the vidoe resumes at the point when the video playback is interrupted
+ when close is clicked, the video playback is closed",Basic,2,1,1
+Play Ad - incentivized ad,BSFN-65,the custom incentivized text,to verify the custom incentivized text,"Set incentivized title, button and message in platform
+ update the title, button, and message through option",incentivized ad of both legacy and MRAID,"1. load the incentivized ad
+ 2. update the incentivized contents information through Option
+ 2. while the video is played, close the video","the incentivized popup is displayed with continue and close button
+ all text strings in the popup match with the updated contents through Option",Functional,2,1,1
+Play Ad - incentivized ad,BSFN-66,the incentivized text with invalid characters,to verify the incentivized text with invalid characters,"Set incentivized title, button and message in platform
+ update some of the title, button, and message with invalid characters through option",incentivized ad of both legacy and MRAID,"1. load the incentivized ad
+ 2. update the incentivized contents information as invalid character through Option
+ 2. while the video is played, close the video",Need to find out the invalid character and what's the UI response,Negative,2,1,1
+Play Ad - incentivized ad,BSFN-67,incentivized popup interruptions,"to verify incentivized popup interruption
+ - background, device lock","Set incentivized title, button and message in platform",incentivized ad of both legacy and MRAID,"1. load the incentivized ad
+ 2. while the video is played, close the video
+ 3. observe the popup displayed
+ 4. lock the device
+ 5. unlock the device
+ 6. the ad is relaunched
+ 7. click ""continu"" or ""close""
+ 8. repeat step 1 to 7 with background interruption","incentivized popup must be persisted when it returns from the interruption
+ when continue is clicked, the vidoe resumes at the point when the video playback is interrupted
+ when close is clicked, the video playback is closed",interruption,2,1,1
+Play Ad - rewarded Ad,BSFN-68,rewarded scenario before the video reaches to 75%,to verify rewarded scenario before the video reaches to 75%,rewarded ads,rewarded ad of both legacy and MRAID,"1. load the rewarded ad
+ 2. play the ad
+ 3. click cta_overlay clickable area before the video playback reaches to 75%","It pauses the video and open app store/storekit/playstore/browser
+ the video resume when it moves back to the ad",Functional,2,1,1
+Play Ad - rewarded Ad,BSFN-69,rewarded scenario after the video reaches to 75%,to verify rewarded scenario after the video reaches to 75%,rewarded ads,rewarded ad of both legacy and MRAID,"1. load the rewarded ad
+ 2. play the ad
+ 3. click cta_overlay clickable area after the video playback passes 75%",it closes the video and move to Endcard,Functional,2,1,1
+Play Ad - MREC,BSFN-70,the UI element of Video,to verify the UI element of Video,Set dimension as W X H = 300 X 250,MREC,1. Play ad,Video is displayed in the right dimension,Basic,2,1,1
+Play Ad - MREC,BSFN-71,FlexFeed configurations,"to verify FlexFeed ad play with the following conditions
+ - no dimension is provided
+ - only one dimension is provided
+ - two valid dimensions are provided
+ - wrong size dimensions is provided",None,"MREC, FlexFeed","1. load the ad
+ 2. open Options to set the dimension
+ 3. set the dimension at each condition
+ - no dimension (W X H = empty X empty)
+ - only one correct dimension is provided (W X H = 300 X empty)
+ - two valid dimensions are provided (W X H = 300 X 250)
+ - wrong dimension is provided (W X H = 300 X 200)
+ 4. Save the option
+ 3. play the ad","Only if the dimension sets as W X H = 300 X 250, it plays the MREC ad successfully. Others pops up error message without playing the ad",Negative,2,1,1
+Play Ad - MREC,BSFN-72,the MREC ad keeps reloading after the ad is closed,to verify the MREC ad keeps reloading after the ad is closed,"Set dimension as W X H = 300 X 250
+ Non auto-cacheable placement",MREC,,"The ad is closed successfully 
+ the ad is auto-cached whatever the auto-cacheable sets YES or NO",Functional,2,1,1
+Play Ad - MREC,BSFN-73,the MREC ad reloading multiple times,to verify the MREC ad reloading multiple times,"Set dimension as W X H = 300 X 250
+ Non auto-cacheable placement",MREC,"1. Play ad
+ 2. close the ad","The ad is closed successfully 
+ the ad is auto-cached whenever the ad is played",Functional,2,1,1
+Play Ad - MREC,BSFN-74,the auto loaded MREC is cleared after re-initialization,to verify the auto loaded MREC is cleared after re-initialization,"Set dimension as W X H = 300 X 250
+ Non auto-cacheable placement",MREC,"1. Play ad
+ 2. close the ad
+ 3. observe the ad is auto-cached
+ 4. kill the app
+ 5. re-initialize the app",the cached MREC ad is cleared and not playable,Functional,2,1,1
+Play Ad - MREC,BSFN-75,MREC ad play after device feature interruption,"to verify the ad play when it returns from interruption 
+ - the device is locked and unlocked
+ - background/foreground
+ - pause and resume by CTA click",Set dimension as W X H = 300 X 250,MREC,"1. Play ad
+ 2. interrupt the ad playback
+ - lock/unlock the device and relaunch the ad
+ - put the ad in background and bring it back to foreground
+ - click CTA button to App Store and return to Ad","whenever the ad video play is resumed, the ad plays successfully",interruption,2,1,1
+Play Ad - FlexFeed Collection View,BSFN-76,the UI element of Video on collection view,to verify the UI element of Video on collection view,"Set dimension as W X H = 300 X 250
+ Collection View",FlexFeed,"1. load FlexFeed Ad
+ 2. Play the FlectFeed Ad on Collection View",Video is displayed in the right dimension on collection view,Functional,2,1,1
+Play Ad - FlexFeed Collection View,BSFN-77,the orientation of Video on collection view,to verify the orientation of Video on collection view,"Set dimension as W X H = 300 X 250
+ Collection View",FlexFeed,"1. load FlexFeed Ad
+ 2. Play the FlectFeed Ad on Collection View
+ 3. change the orientation",Video is displayed on collection view when the orientation is changed,Functional,2,1,1
+Play Ad - FlexFeed Collection View,BSFN-78,FlexFeed ad play after device interruption,"to verify the ad play when it returns from interruption 
+ - the device is locked and unlocked
+ - background/foreground
+ - pause and resume by CTA click","Set dimension as W X H = 300 X 250
+ Collection View",FlexFeed,"1. load FlexFeed Ad
+ 2. Play the FlectFeed Ad on Collection View
+ 3. interrupt the ad by each condition
+ 4. relaunch the ad","whenever the ad video play is resumed, the ad plays successfully on collection view",interruption,2,1,1
+Play Ad - device interruption,BSFN-79,video playback interruption by usb charger plug in,to verify video playback interruption by usb charger plug in,USB charger cable is ready,any,"1. load an ad and play the video
+ 2. plug in the USB charger cable at video playback and Endcard",USB charger status update should not affect on ad playback,interruption,2,1,1
+Play Ad - device interruption,BSFN-80,video playback interruption by usb charger plug out,to verify video playback interruption by usb charger plug out,USB charger cable is ready,any,"1. plug in the USB charger cable
+ 2. load an ad and play the video
+ 3. unplug the USB charger cable at video playback and Endcard",USB charger status update should not affect on ad playback,interruption,2,1,1
+CTA response on Endcard,BSFN-81,CTA response - legacy (two page ad),to verify CTA response - legacy (two page ad),"CTA url with 
+ - app id (storekit)
+ - http url with app id(appstore)
+ - normal url (browser)",legacy,"1. load the legacy ad
+ 2. play the ad
+ 3. click cta_overlay clickable area
+ 4. repeat with each type of CTA Url (app id, http url with app id, normal url)","open storekit, appstore, browser by each type of CTA url
+ resume the video when it returns to the ad",Functional,2,1,1
+CTA response on Endcard,BSFN-82,"CTA response - Flexview, Flexfeed, Mraid (single page ad)","to verify CTA response - Flexview, Flexfeed, Mraid (single page ad)","CTA url with 
+ - app id (storekit)
+ - http url with app id(appstore)
+ - normal url (browser)","Flexview, FlexFeed, MRAID, MREC","1. load the dynamic template ads
+ 2. play the ad
+ 3. click CTA button
+ 4. repeat with each type of CTA Url (app id, http url with app id, normal url)","open storekit, appstore, browser by each type of CTA url",Functional,2,1,1
+CTA response on Endcard,BSFN-83,CTA response on EndCard,to verify CTA response on EndCard,"CTA url with 
+ - app id (storekit)
+ - http url with app id(appstore)
+ - normal url (browser)","legacy, mraid","1. load the legacy ad
+ 2. play the ad
+ 3. move to EndCard
+ 3. click CTA button
+ 4. repeat with each type of CTA Url (app id, http url with app id, normal url)","open storekit, appstore, browser by each type of CTA url",Functional,2,1,1
+CTA response on Endcard,BSFN-84,the ad without postBundle (EndCard),to verify the ad without postBundle (EndCard),set Creatives without EndCard,legacy ad,"1. load an legacy ad without EndCard (No postbundle)
+ 2. play the ad
+ 3. wait for play plays in full or close the video",it displays Appstore without showing Endcard,Negative,2,1,1
+Report Ad,BSFN-85,"the stored /report_ad by airplane mode, network disable","to verify the stored /report_ad by airplane mode, network disable",,all ad types,need to find out the steps to test,"- No /report_ad is called with network disabled
+ - stored /report_ad is called after network is restored",Interruption,2,1,1
+Report Ad,BSFN-86,the contents of userActions and clickedThrough,to verify the contents of userActions and clickedThrough,,all ad types,"1. load ad
+ 2. play ad
+ 3. generate all userActions - mute/unmute multiple times, close video, click CTA
+ 4. Close the ad
+ 5. Observe /report_ad","all generated userActions are recorded in ""userActions"" and ""clickedThrough""
+ - download, cta, mute, unmute, video_close, ...",Functional,2,1,1
+Report Ad,BSFN-87,the consistency of userActions and clickedThrough contents,to verify the consistency of userActions and clickedThrough contents,,all ad types,"1. load ad
+ 2. play ad
+ 3. try multiple CTA clickable area click on video
+ 4. Close the ad
+ 5. Observe /report_ad","the same number of ""cta"" is included in ""userActions"" and ""clickedThrough""
+ /report_ad request payload must have ""userAction"" information
+ ""userAction"" and ""clickThrough"" must be matched",Functional,2,1,1
+Version Upgrade,UPGR-1,the upgrade after fresh installation,"to verify the upgrade after fresh installation
+ 
+ Fresh installation -> Upgrade",Prepare the lastest public released version,any,"1. install the latest public released version
+ 2. upgrade to the new version
+ 3. initialize the app
+ 4. load and play the ad 
+ 5. close the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+Version Upgrade,UPGR-2,the upgrade after initialization,"to verify the upgrade after initialization
+ 
+ Installation -> initialization -> upgrade",Prepare the lastest public released version,any,"1. install the latest public released version
+ 2. initialize the app
+ 3. upgrade to the new version
+ 4. initialize the app
+ 5. load and play the ad 
+ 6. close the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+Version Upgrade,UPGR-3,the upgrade after initialization and kill the app,"to verify the upgrade after initialization
+ 
+ Installation -> initialization -> kill the app -> upgrade",Prepare the lastest public released version,any,"1. install the latest public released version
+ 2. initialize the app
+ 3. kill the app
+ 4. upgrade to the new version
+ 5. initialize the app
+ 6. load and play the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+Version Upgrade,UPGR-4,the upgrade after multiple ad plays,"to verify the upgrade after multiple ad plays
+ 
+ Installation -> initialization -> play ads -> upgrade",Prepare the lastest public released version,any,"1. install the latest public released version
+ 2. initialize the app
+ 3. load, play and close the ad multiple times
+ 4. upgrade to the new version
+ 5. initialize the app
+ 6. load and play the ad","initialization, load ad, play ad must work successfully after upgrade",Basic,2,1,1
+Version Upgrade,UPGR-5,the upgrade during ad play in background,"to verify the upgrade during ad play
+ 
+ Play ad (video) -> background -> upgrade",Prepare the lastest public released version,all ad types,"1. install the latest public released version
+ 2. initialize the app
+ 3. load ad and play the ad
+ 4. put the ad in background during the video is playing
+ 5. upgrade to the new version
+ 6. initialize the app
+ 7. load and play the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+Version Upgrade,UPGR-6,the upgrade after ad play interuption by closing the ad during the video is playing,"to verify the upgrade after ad play interuption by closing the ad during the video is playing
+ 
+ Play ad (video) -> kill the ad -> upgrade",Prepare the lastest public released version,all ad types,"1. install the latest public released version
+ 2. initialize the app
+ 3. load and play the ad
+ 4. kill the app during the video is playing
+ 5. upgrade the app
+ 6. initialize the app
+ 7. load and play the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+Version Upgrade,UPGR-7,the upgrade when StoreKit is displayed by CTA or CTA Overlay on video,"to verify the upgrade when StoreKit is displayed by CTA or CTA Overlay on video
+ 
+ Play ad (video) -> CTA or CTA overlay click -> storekit -> background -> upgrade",Prepare the lastest public released version,Legacy,"1. install the latest public released version
+ 2. initialize the app
+ 3. load ad and play the ad
+ 4. click Video to open StoreKit
+ 4. put the ad with StoreKit in background
+ 5. upgrade to the new version
+ 6. initialize the app
+ 7. load and play the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+Version Upgrade,UPGR-8,"the upgrade after ad play interuption by closing the ad on StoreKit
+ 
+ Play ad (video) -> CTA or CTA Overlay click -> Storekit -> kill the ad -> upgrade","to verify the upgrade after ad play interuption by closing the ad on StoreKit
+ 
+ Play ad (video) -> CTA or CTA Overlay click -> Storekit -> kill the ad -> upgrade",Prepare the lastest public released version,Legacy,"1. install the latest public released version
+ 2. initialize the app
+ 3. load and play the ad
+ 4. click CTA overlay to open StoreKit
+ 5. kill the app during StoreKit is shown
+ 6. upgrade the app
+ 7. initialize the app
+ 8. load and play the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+Version Upgrade,UPGR-9,the upgrade after ad play interuption by putting the ad in background during EndCard is shown,"to verify the upgrade after ad play interuption by putting the ad in background during EndCard is shown
+ 
+ Endcard -> background -> upgrade",Prepare the lastest public released version,all ad types,"1. install the latest public released version
+ 2. initialize the app
+ 3. load ad and play the ad
+ 4. move to Endcard
+ 4. put the ad in background
+ 5. upgrade to the new version
+ 6. initialize the app
+ 7. load and play the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+Version Upgrade,UPGR-10,the upgrade after ad play interuption by closing the ad during EndCard is shown,"to verify the upgrade after ad play interuption by closing the ad during EndCard is shown
+ 
+ Endcard -> kill the ad -> upgrade",Prepare the lastest public released version,all ad types,"1. install the latest public released version
+ 2. initialize the app
+ 3. load and play the ad
+ 4. move to Endcard
+ 5. kill the app during Endcard is shown
+ 6. upgrade the app
+ 7. initialize the app
+ 8. load and play the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+Version Upgrade,UPGR-11,the upgrade when StoreKit is displayed by CTA on EndCard,"to verify the upgrade when StoreKit is displayed by CTA on Endcard
+ 
+ EndCard -> CTA click -> storekit/appstore -> background -> upgrade",Prepare the lastest public released version,all ad types,"1. install the latest public released version
+ 2. initialize the app
+ 3. load ad and play the ad
+ 4. move to Endcard
+ 4. click CTA to open StoreKit/Appstore
+ 4. put the ad with StoreKit/Appstore in background
+ 5. upgrade to the new version
+ 6. initialize the app
+ 7. load and play the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+Version Upgrade,UPGR-12,the upgrade when StoreKit is displayed by CTA on Endcard and kill the ad,"to verify the upgrade when StoreKit is displayed by CTA on Endcard
+ 
+ EndCard -> CTA click -> storekit/appstore -> kill the ad -> upgrade",Prepare the lastest public released version,all ad types,"1. install the latest public released version
+ 2. initialize the app
+ 3. load ad and play the ad
+ 4. move to Endcard
+ 4. click CTA to open StoreKit/Appstore
+ 4. kill the app
+ 5. upgrade to the new version
+ 6. initialize the app
+ 7. load and play the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+Version Upgrade,UPGR-13,the upgrade during assets are downloading,"to verify the upgrade during assets are downloading
+ 
+ Load Ad -> assets are downloading -> background -> upgrade",Prepare the lastest public released version,any,"1. install the latest public released version
+ 2. initialize the app
+ 3. load ad
+ 4. put the ad in background during the asset is downloading
+ 5. upgrade the app
+ 6. initialize the app
+ 7. load and play the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+Version Upgrade,UPGR-14,the upgrade during assets are downloading and kill the app,"to verify the upgrade during assets are downloading
+ 
+ Load Ad -> assets are downloading -> kill the app -> upgrade",Prepare the lastest public released version,any,"1. install the latest public released version
+ 2. initialize the app
+ 3. load ad
+ 4. kill the app during the asset is downloading
+ 5. upgrade the app
+ 6. initialize the app
+ 7. load and play the ad","initialization, load ad, play ad must work successfully after upgrade",Functional,2,1,1
+API Payload,API-1,"Request API Payloa - ""app""","Request API Payload to verify the information of ""app""",,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""id"" matches to App ID
+ ""bundle"" matches to test app bundle name
+ ""ver"" matches to test app version",Functional,2,1,1
+API Payload,API-2,"Request API Payload - ""device""","Request API Payload to verify the information of ""device""",,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""make""
+ ""os""
+ ""model""
+ ""osv""",Functional,2,1,1
+API Payload,API-3,Request API Payload - moat viewability ON,Request API Payload to verify moat viewability,set moat ON in campaign,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""viewability"": true",Functional,2,1,1
+API Payload,API-4,Request API Payload - moat viewability OFF,Request API Payload to verify moat viewability,set moat OFF in campaign,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""viewability"": false",Functional,2,1,1
+API Payload,API-5,"Request API Payload - ""vungle""->""is_google_play_services_available""","Request API Payload to verify the information of ""vungle""->""is_google_play_services_available""",google service available device,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""is_google_play_services_available"": true",Functional,2,1,1
+API Payload,API-6,"Request API Payload - ""vungle""->""is_google_play_services_available"" on Amazon, Chinese model","Request API Payload to verify the information of ""vungle""->""is_google_play_services_available"" on Amazon, Chinese model","google service disabled device - Amazon, Chinese",any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""is_google_play_services_available"": false",Functional,2,1,1
+API Payload,API-7,"Request API Payload - ""vungle""->""battery_level""","Request API Payload to verify the information of ""vungle""->""battery_level""",read the current battery level from device,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","the value of ""battery_level"" matches to the one of the device",Functional,2,1,1
+API Payload,API-8,"Request API Payload - ""vungle""->""battery_state"" when charger cable is plugged","Request API Payload to verify the information of ""vungle""->""battery_state"" when charger cable is plugged",charger cable is plugged,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""battery_state"" reflects to the state of charger cable plug",Functional,2,1,1
+API Payload,API-9,"Request API Payload - ""vungle""->""battery_state"" when charger cable is unplugged","Request API Payload to verify the information of ""vungle""->""battery_state"" when charger cable is unplugged",charger cable is unplugged,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""battery_state"" reflects to the state of charger cable unplug",Functional,2,1,1
+API Payload,API-10,"Request API Payload - ""vungle""->""connection_type"", ""connection_type_detail""","Request API Payload to verify the information of ""vungle""->""connection_type"", ""connection_type_detail""",connect to WiFi,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""connection_type"": ""WiFi""
+ ""connection_type_detail"": ""WiFi""",Functional,2,1,1
+API Payload,API-11,"Request API Payload - ""vungle""->""locale""","Request API Payload to verify the information of ""vungle""->""locale""","Set locale as English
+ Set locale as Spanish",any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""locale"" matches to the selection",Functional,2,1,1
+API Payload,API-12,"Request API Payload - ""vungle""->""time_zone""","Request API Payload to verify the information of ""vungle""->""time_zone""","set Pacific Time Zone
+ set Central Time Zone",any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""time_zone"": America\/Los_Angeles
+ ""time_zone"":",Functional,2,1,1
+API Payload,API-13,"Request API Payload - ""vungle""->""volume_level""","Request API Payload to verify the information of ""vungle""->""volume_level""","set volume to 0
+ set volume to max",any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""volume_level"": 0, 
+ ""volume_level"": max",Functional,2,1,1
+API Payload,API-14,"Request API Payload - ""vungle""->""storage_bytes_available""","Request API Payload to verify the information of ""vungle""->""storage_bytes_available""",read the current available memory,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""storage_bytes_available"": matches to the one from the device",Functional,2,1,1
+API Payload,API-15,Request API Payload - the default value of GDPR after refresh initialization - US geo location,Request API Payload to verify the default value of GDPR after refresh initialization - US geo location,set Geo-level in header to US,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""status"": ""unknown""",Functional,2,1,1
+API Payload,API-16,Request API Payload - the default value of GDPR after refresh initialization - UK geo location,Request API Payload to verify the default value of GDPR after refresh initialization - UK geo location,set Geo-level in header to UK,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","""status"": ""unknown""",Functional,2,1,1
+API Payload,API-17,API Header - the user agent info in header of all API calls,API Header: to verify the user agent info in header of all API calls,,any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","User-Agent : ""VungleDroid/<sdk_version>""
+ Eg. User-Agent: VungleDroid/6.3.17",Functional,2,1,1
+API Payload,API-18,Request API Payload - request /config API Response Payload incentivized,Request API Payload - request /config API Response Payload to verify incentivized,"inventivized ad
+ non incentiviazed",any,"1. initialize the app to call /config API 
+ 2. load an ad to call /ads API
+ 3. play an ad to call /will_play_ad
+ 4. close the ad to call /report_ad","1: for incentivized ad
+ 0: for non incentivized ad",Functional,2,1,1
+API Payload,API-19,"/config API Response Payload - ""endpoints"" -> ""new""","/config API Response Payload to verify ""endpoints"" -> ""new""",fresh installation,any,"1. install the test app
+ 2. type in the vaild App ID and HostAPI
+ 3. initialize the app","""endpoints""->""new"" API URL is called",Functional,2,1,1
+API Payload,API-20,"/config API Response Payload - ""endpoints"" -> ""ads""","/config API Response Payload to verify ""endpoints"" -> ""ads""","auto-cacheable ads
+ non auto-cacheable ads",any,"1. initialize the app
+ 2. load ad or auto-cache","auto-cacheable ads call ""endpoints""->""ads"" API URL automatically to auto-cache the ad
+ non auto-cacheable ads call ""endpoints""->""ads"" API URL when ""load ad"" is selected",Functional,2,1,1
+API Payload,API-21,"/config API Response Payload - ""endpoints"" -> ""will_play_ad""","/config API Response Payload to verify ""endpoints"" -> ""will_play_ad""",,any,"1. initialize the app
+ 2. load ad or auto-cache
+ 3. play the ad","""endpoints""->""will_play_ad"" API URL",Functional,2,1,1
+API Payload,API-22,"/config API Response Payload - ""endpoints"" -> ""report_ad""","/config API Response Payload to verify ""endpoints"" -> ""report_ad""",,any,"1. initialize the app
+ 2. load ad or auto-cache
+ 3. play the ad
+ 4. close the ad","""endpoints""->""report_ad"" API URL",Functional,2,1,1
+API Payload,API-23,"/config API Response Payload - ""endpoints"" -> ""log""","/config API Response Payload to verify ""endpoints"" -> ""log""","""log"" is enabled",any,"1. initialize the app
+ 2. load ad or auto-cache
+ 3. play the ad
+ 4. observe /log API call","""endpoints""->""log"" API URL",Functional,2,1,1
+API Payload,API-24,"/config API Response Payload - ""endpoints"" -> ""ri""","/config API Response Payload to verify ""endpoints"" -> ""ri""","""ri"" is enabled",any,"1. initialize the app
+ 2. load ad or auto-cache
+ 3. play the ad
+ 4. Observe /ri API call","""endpoints""->""ri"" API URL",Functional,2,1,1
+API Payload,API-25,"""playback"" -> ""buffer_timeout""","to verify ""playback"" -> ""buffer_timeout""",,any,,timeout ad playback,Functional,2,1,1
+API Payload,API-26,"""will_play_ad"" -> ""enabled""","to verify ""will_play_ad"" -> ""enabled""",,any,,"true: ad streaming works
+ false: ad play doesn't work",Functional,2,1,1
+API Payload,API-27,"""will_play_ad"" -> ""request_timeout""","to verify ""will_play_ad"" -> ""request_timeout""",,any,,??,Functional,2,1,1
+API Payload,API-28,/config API Null Callback,/config API Null Callback,prepare /config response with Null,any,1.initialize with /config response with Null JSON through Charles,"iOS:
+ - initialization successful with displaying the cached ads. 
+ - the cached ads fails playing with ""SDK is already playing an ad""
+ 
+ Android: failed initialization with VungleException: Configuration Error occurred.",Negative,2,1,1
+API Payload,API-29,/ads API Null Callback,/ads API Null Callback,prepare /ads response with Null,any,"1. load ad with /ads response with Null JSON through Charles
+ 2. Play the ad","iOS: 
+ - auto-cacheable ad: retry /ads API call
+ - Non auto-cacheable ad: ad loading is dismissed without retry
+ Android: 
+ - Auto-cacheable Ad: retry /ads API call for with VungleError: No Advertisement is currently available
+ - Non Auto-cacheable Ad: dismiss ad loading with with VungleError: No Advertisement is currently available. No retry",Negative,2,1,1
+API Payload,API-30,/will_play_ad API Null Callback,/will_play_ad API Null Callback,prepare /will_play_ad response with Null,any,"1. load ad
+ 2. Play the ad with /will_play_ad response with Null JSON","/will_play_ad API is called with {} response
+ it doesn't affect on ad play
+ No retry",Negative,2,1,1
+API Payload,API-31,/report API Null Callback,/report API Null Callback,prepare /report response with Null,any,"1. load ad
+ 2. Play the ad 
+ 3. close the ad with /report response with Null JSON","/report_ad API is called with {} response
+ it doesn't affect on the next ad play
+ No retry",Negative,2,1,1
+API Payload,API-32,/new API Null Callback,/new API Null Callback,prepare /new response with Null,any,"1. fresh install
+ 2. initialize with /new response with Null JSON through Charles","/new API is called with {} response
+ it doesn't affect on ad play
+ No retry",Negative,2,1,1
+Device Storage Limit,DSLM-1,No space to start SDK initialization,No space to start SDK initialization,<50M memory available,all ad types,"1. Set device storage to lower than 50MB
+ 2. initialize the app",initialization must be failed with error message,Functional,2,1,1
+Device Storage Limit,DSLM-2,No space to load the auto-cacheable ad,No space to load the auto-cacheable ad,,all ad types,"1. Set device storage to slightly higher than 50MB (51MB)
+ 2. initialize the app
+ 3. wait for multiple auto-cacheable ads are loading",Initialize but it shows error message when the app tries to auto-cache,Functional,2,1,1
+Device Storage Limit,DSLM-3,the dismissed auto-cacheable placement by low memory restarts to auto-cache after the enough memory is available,the dismissed auto-cacheable placement by low memory restarts to auto-cache after the enough memory is available,,all ad types,"1. Set device storage to slightly higher than 50MB (51MB)
+ 2. initialize the app
+ 3. wait for multiple auto-cacheable ads are loading
+ 4. observe the auto-caching is paused or cancelled
+ 5. set device storage higher enough to compete in auto-caching",Need to find out the expected behavior... retry auto-cache automatically??,Functional,2,1,1
+Device Storage Limit,DSLM-4,No space to load the non auto-cacheable ad,No space to load the non auto-cacheable ad,,all ad types,"1. Set device storage to slightly higher than 50MB (51MB)
+ 2. initialize the app
+ 3. Set device storage to lower than 50MB before the ad is loaded",Initialize but it shows error message when the app tries to load,Functional,2,1,1
+Device Storage Limit,DSLM-5,Load the dismissed non auto-cacheable ad after the enough memory is available,Load the dismissed non auto-cacheable ad after the enough memory is available,,all ad types,"1. Set device storage to slightly higher than 50MB (51MB)
+ 2. initialize the app
+ 3. Set device storage to lower than 50MB before the ad is loaded
+ 4. after the ad load is dismissed, increase the available device storage enough to load the ads
+ 5. load the ad again",ad is loaded successully and all assets are stored,Functional,2,1,1
+Asset Download,ASDW-1,Assets download with the different network setting,"Assets download at the different network
+ - 4G / LTE
+ - 3G
+ - 1x
+ - WiFi speed","The device is connected to Charles
+ Set Throttle On to change the network bandwidth",Any,"1. set the data network to each low bandwidth
+ 2. download assets","Ad loading should be successful
+ All assets should be loaded with Status 200",Functional,2,1,1
+Asset Download,ASDW-2,Initialize on WiFi and Load Ads on Data Network,Initialize on WiFi and Load Ads on Data Network,"ADB tool is ready
+ adb commands:
+ - WiFi: adb shell svc wifi enable/disable
+ - Data Network: adb shell svc data enable/disable",Any,"1. Enable WiFi
+ 2. Initialize the app
+ 3. Switch to Data Network
+ 4. Load Ad","Ad loading should be successful
+ All assets should be loaded with Status 200",Functional,2,1,1
+Asset Download,ASDW-3,Initialize on Data Network and Load Ads on WiFi,Initialize on Data Network and Load Ads on WiFi,"ADB tool is ready
+ adb commands:
+ - WiFi: adb shell svc wifi enable/disable
+ - Data Network: adb shell svc data enable/disable",Any,"1. Enable Data Network
+ 2. Initialize the app
+ 3. Switch to WiFi
+ 4. Load Ad","Ad loading should be successful
+ All assets should be loaded with Status 200",Functional,2,1,1
+Asset Download,ASDW-4,Load/play Ad on WiFi and load next ad on Data Network,Load/play Ad on WiFi and load next ad on Data Network,"ADB tool is ready
+ adb commands:
+ - WiFi: adb shell svc wifi enable/disable
+ - Data Network: adb shell svc data enable/disable",Any,"1. Enable WiFi
+ 2. Initialize the app
+ 3. Load one ad and play
+ 4. Switch to Data Network
+ 5. Load the same Ad","Ad loading should be successful
+ All assets should be loaded with Status 200",Functional,2,1,1
+Asset Download,ASDW-5,Load/play Ad on Data Network and load next ad on WiFi,Load/play Ad on Data Network and load next ad on WiFi,"ADB tool is ready
+ adb commands:
+ - WiFi: adb shell svc wifi enable/disable
+ - Data Network: adb shell svc data enable/disable",Any,"1. Enable Data Network
+ 2. Initialize the app
+ 3. Load one ad and play
+ 4. Switch to WiFi
+ 4. Load the same ad","Ad loading should be successful
+ All assets should be loaded with Status 200",Functional,2,1,1
+Asset Download,ASDW-6,Kill the app while assets are downloading,Kill the app while assets are downloading,"The device is connected to Charles
+ Set Throttle with low bandwidth of network to download asset slowly",Any,"1. download assets
+ 2. kill the test app while an asset is downloading
+ 3. launch and re-initialize the test app
+ 4. Turn off Throttle on Charles to speed up the asset download","Ad loading should be successful
+ All assets should start to load with Status 200
+ When the app is relaunched, the interrupted assets should be loaded partially with Status 206
+ The ad must be playable after the re-load is completed
+ 
+ Auto-Cacheable AD: SDK triggers re-downloading automatically
+ Non Auto-Cacheable AD: SDK doesn't trigger re-downloading. when the load ad is triggered manually, it starts re-downloading",Interruption,2,1,1
+Asset Download,ASDW-7,put the app in background while assets are downloading,put the app in background while assets are downloading,"The device is connected to Charles
+ Set Throttle with low bandwidth of network to download asset slowly",Any,"1. initialize the app
+ 2. download the ads
+ 3. put the app in background","Ad loading continues on while the app stays in background
+ When the app is in foreground, the ad should be playable",Interruption,2,1,1
+Asset Download,ASDW-8,Network switch from WiFi to Data Network during asset downloading,WiFi to Data Network,"The device has both WiFi and Data Network enabled
+ The device is connected to Charles
+ Set Throttle with low bandwidth of network to download asset slowly
+ 
+ adb commands:
+ - WiFi: adb shell svc wifi enable/disable
+ - Data Network: adb shell svc data enable/disable",Any,"1. download assets on WiFi Network
+ 2. disable WiFi network while assets are downloading
+ 3. Observe the data network is enabled","Ad loading should be successful
+ Ad should be playable",Interruption,2,1,1
+Asset Download,ASDW-9,Network switch from Data network to WiFi during asset downloading,Data network to WiFi,"The device has both WiFi and Data Network enabled
+ The device is connected to Charles
+ Set Throttle with low bandwidth of network to download asset slowly
+ 
+ adb commands:
+ - WiFi: adb shell svc wifi enable/disable
+ - Data Network: adb shell svc data enable/disable",Any,"1. download assets on Data Network
+ 2. disable Data network by adb command while assets are downloading
+ 3. Observe WiFi network is enabled","Ad loading should be successful
+ Ad should be playable",Interruption,2,1,1
+Asset Download,ASDW-10,Network bandwidth transition Low to High Bandwidth,"Low to High Bandwidth Transition
+ low bandwidth (3G, 1x) -> back to high bandwidth",,Any,"1. Set Throttle preset to low bandwidth
+ 2. download assets
+ 3. set Throttle preset to high bandwidth (4G) while the assets are downloading","Ad loading should be successful
+ the ad should be playable",Interruption,2,1,1
+Asset Download,ASDW-11,Invalid MP4 video,Invalid MP4 video,multiple invalid videos,any,"1. load ad with the invalid mp4 file through Charles
+ 2. Play the ad","- no crash
+ - video play is skipped
+ - display EndCards only",Negative,2,1,1
+Asset Download,ASDW-12,Broken MP4,Broken MP4,prepare txt file as mp4 file,any,"1. load ad with the broken mp4 file through Charles
+ 2. Play the ad","iOS: fails downloading the invalid asset and fails the ad loading
+ Android: skip playing video and displays EndCard only",Negative,2,1,1
+Asset Download,ASDW-13,Broken Bundle Zip package,Broken Bundle Zip package,prepare txt file as zip file,any,"1. load ad with the broken bundle package zip file through Charles
+ 2. Play the ad","iOS: fails downloading the invalid asset and fails the ad loading
+ Android: skip displaying EndCard. Ad closes after video playback is done",Negative,2,1,1
+Malformed URL,MFAU-1,malformed URL - /config endpoints,malformed URL - /config endpoints,"enable rewrite tool in Charles
+ prepare /config response payload with the malformed URL at ""ads"", ""will_play_ad"", and ""report_ad""",any,"1. rewrite /config response with the malformed URL in ""endpoints""
+ 2. initialize the app",No crash happens,Negative,2,1,1
+Malformed URL,MFAU-2,"malformed URL - /ads ""tpat"" -> ""play_percentage""","malformed URL - /ads ""tpat"" -> ""play_percentage""","enable rewrite tool in Charles
+ prepare /ads response payload with the malformed URL in ""tpat""",any,"1. initialize the app
+ 2. rewrite /ads response with the malformed URL in one or more of ""tpat"" -> ""play_percentage""
+ 3. enable rewrite in Charles
+ 4. load the ad
+ 5. observe SDK retries /ads API call
+ 6. disable rewrite in Charles
+ 7. Observe the following /ads API call","No crash happen
+ /ads API call is retried
+ The retried /ads API call loads new ad when the rewrite is disabled in Charles",Negative,2,1,1
+Malformed URL,MFAU-3,"malformed URL - /ads ""tpat"" -> ""postroll_click"", ""postroll_view""","malformed URL - /ads ""tpat"" -> ""postroll_click"", ""postroll_view""","enable rewrite tool in Charles
+ prepare /ads response payload with the malformed URL in ""tpat""",any,"1. initialize the app
+ 2. rewrite /ads response with the malformed URL in one or more of ""tpat"" -> ""play_percentage""
+ 3. enable rewrite in Charles
+ 4. load the ad
+ 5. observe SDK retries /ads API call
+ 6. disable rewrite in Charles
+ 7. Observe the following /ads API call","No crash happens
+ /ads API call is retried
+ The retried /ads API call loads new ad when the rewrite is disabled in Charles",Negative,2,1,1
+Malformed URL,MFAU-4,"malformed URL - /ads “callToActionDest”, “callToActionUrl”","malformed URL - /ads “callToActionDest”, “callToActionUrl”","enable rewrite tool in Charles
+ prepare /ads response payload with the malformed URL in “callToActionDest”, “callToActionUrl”",any,"1. initialize the app
+ 2. rewrite /ads response with the malformed URL in one or more of “callToActionDest”, “callToActionUrl”
+ 3. load the ad",No crash happens,Negative,2,1,1
+Malformed URL,MFAU-5,"malformed URL - /ads “templateURL”, ""postBundle""","malformed URL - /ads “templateURL”, ""postBundle""","enable rewrite tool in Charles
+ prepare /ads response payload with the malformed URL in “templateURL”, ""postBundle""",any,"1. initialize the app
+ 2. rewrite /ads response with the malformed URL in “templateURL”, ""postBundle""
+ 3. load the ad
+ 
+ if /ads API call retries, disable rewrite in Charles
+ and Observe the following /ads API call",No crash happens,Negative,2,1,1
+Malformed URL,MFAU-6,malformed URL - /ads “templateSettings”,malformed URL - /ads “templateSettings”,"enable rewrite tool in Charles
+ prepare /ads response payload with the malformed URL in “templateSettings” -> ""CTA_BUTTON_URL""",DT only,"1. initialize the app
+ 2. rewrite /ads response with the malformed URL in “templateSettings” -> ""CTA_BUTTON_URL""
+ 3. load the ad",No crash happens,Negative,2,1,1
+Malformed URL,MFAU-7,malformed URL - /ads “cacheable_replacements”,malformed URL - /ads “cacheable_replacements”,enable rewrite tool in Charles,DT only,"1. initialize the app
+ 2. rewrite /ads response with the malformed URL in one or more of “cacheable_replacements”
+ 3. load the ad
+ 4. play the ad",No crash happens,Negative,2,1,1
+Malformed URL,MFAU-8,POSTROLL_CLICK URL with /new API endpoint,POSTROLL_CLICK URL with /new API endpoint,"enable rewrite tool in Charles
+ create tpat url with """"https://apiqa.vungle.com/api/v5/new?app_id=5c003b9a3933314cf38ff7f3\u0026ifa=00000000-0000-0000-0000-000000000000\u0026conversion=1\u0026event_id=5c38e2ce631bc200015fb5ec""",any,"1. initialize the app
+ 2. add one malformed URL with ""/new"" API endpoint in POSTROLL_CLICK TPAT under ""tpat"" of /ads response
+ 2. rewrite to the /ads
+ 3. load the ad
+ 4. play the ad
+ 5. Click CTA to fire POSTROLL_CLICK TPAT","No Crash happens
+ The TPATs are fired successfully",Negative,2,1,1
+Malformed URL,MFAU-9,URL returns with 302 status,URL returns with 302 status,"enable rewrite tool in Charles
+ ""callToActionUrl"": ""https://app.appsflyer.com/com.vungle.games.tossacoin?pid=vungle_int\u0026af_click_lookback=7d\u0026vungleappid=7748832\u0026af_cost_model=CPI\u0026af_cost_value=9999""",any,"1. initialize the app
+ 2. add the url that returns 302 status response
+ 2. rewrite to the /ads
+ 3. load the ad
+ 4. play the ad
+ 5. Click CTA","No Crash happens
+ The API returns with 302 status successfully",Negative,2,1,1
+Malformed URL,MFAU-10,CTA Url with valid protocols - https,CTA Url with valid protocols - https,"CTA URL with valid protocol
+ IOS:
+ https://itunes.apple.com/us/app/apple-tv-remote/id1096834193?mt=8
+ 
+ Android:
+ https://play.google.com/store/apps/details?id=com.nianticlabs.pokemongo",any,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url through Storekit/App Store during video is playing
+ 4. return to the ad","IOS: 
+ storekit: it opens on native UI page
+ AppStore: it opens on AppStore
+ 
+ Android: 
+ it opens on Play Store",Negative,2,1,1
+Malformed URL,MFAU-11,"CTA Url with valid protocols - itms, market","CTA Url with valid protocols - itms, market","CTA URL with valid protocol
+ IOS:
+ itms://itune.apple.com/us/app/apple-tv-remote/id1096834193?mt=8x
+ 
+ Android:
+ market://details?id=com.nianticlabs.pokemongo",any,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url through Storekit/App Store during video is playing
+ 4. return to the ad","IOS:
+ storekit: it opens on native UI page
+ AppStore: it opens on iTune Store
+ 
+ Android:
+ it opens on Play Store",Negative,2,1,1
+Malformed URL,MFAU-12,CTA Url with invalid protocol,CTA Url with invalid protocol,"CTA URL with invalid protocol
+ IOS:
+ itm://itune.apple.com/us/app/apple-tv-remote/id1096834193?mt=8
+ htts://itune.apple.com/us/app/apple-tv-remote/id1096834193?mt=8
+ 
+ Android:
+ mark://details?id=com.nianticlabs.pokemongo
+ https://play.google.com/store/apps/details?id=com.nianticlabs.pokemongo",any,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url through Storekit/App Store during video is playing","The click doesn't response on UI
+ TPAT(POSTROLL_CLICK) is fired
+ 
+ Android: the expected behavior is under discussion at AND-2013",Negative,2,1,1
+Malformed URL,MFAU-13,CTA Url with invalid domain,CTA Url with invalid domain,"CTA URL with invalid domain
+ IOS:
+ https://itune.apple.com/us/app/apple-tv-remote/id1096834193?mt=8
+ 
+ Android: 
+ https://play.googl.com/store/apps/details?id=com.nianticlabs.pokemong",any,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url through Storekit/App Store during video is playing","IOS:
+ storekit: it opens AppStore successfully with the valid App ID
+ AppStore: it opens on iTune Store, but it fails displaying the app
+ 
+ Android: ""This site can't be reached"" is displayed on the browser",Negative,2,1,1
+Malformed URL,MFAU-14,CTA Url with invalid Application ID,CTA Url with invalid Application ID,"CTA URL with 
+ IOS:
+ https://itunes.apple.com/us/app/apple-tv-remote/id10968341?mt=8
+ 
+ Android:
+ https://play.google.com/store/apps/details?id=com.nianticlabs.pokemon",any,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url through Storekit/App Store during video is playing","IOS:
+ storekit: it opens AppStore successfully but it fails displaying the app
+ AppStore: it opens on iTune Store, but it fails displaying the app
+ 
+ Android: playstore is launched successfully but it displays ""item not found""",Negative,2,1,1
+Malformed URL,MFAU-15,CTA Url without Application ID,CTA Url without Application ID,"CTA URL with 
+ IOS: https://www.vungle.com
+ Android: https://play.google.com/store/apps",any,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url through Storekit/App Store during video is playing","IOS:
+ Storekit doesn't launched because the URL doesn't include AppID.
+ the app always opens browser with the url when the CTA is clicked
+ 
+ Android: Playstore is launched with the main page",Negative,2,1,1
+Malformed URL,MFAU-16,CTA Url with blank,CTA Url with blank,"CTA URL with """"",any,"1. load ad
+ 2. play ad
+ 3. click the clickable area to launch the CTA Url through Storekit/App Store during video is playing","The click doesn't response on UI
+ TPAT(POSTROLL_CLICK) is fired
+ 
+ Android: the expected behavior is under discussion at AND-2013",Negative,2,1,1
+AutoCache/Multi AutoCache,ATCH-1,no placement auto-cached,no placement auto-cached,zero auto-cacheable placement,any,"1. initialize the app
+ 2. observe ads",no ad must be auto-cached,Boundary,2,1,1
+AutoCache/Multi AutoCache,ATCH-2,no placement auto-cached after clear cache,no placement auto-cached after clear cache,zero auto-cacheable placement,any,"1. initialize the app
+ 2.observe no ad auto-cached
+ 3. clear cache",no ad must be auto-cached,Boundary,2,1,1
+AutoCache/Multi AutoCache,ATCH-3,no auto-cached after playing,no auto-cached after playing,zero auto-cacheable placement,any,"1. initialize the app
+ 2.observe no ad auto-cached
+ 3. play ad and close","/ads, /will_play_ad, and /report_ad must be called in sequence
+ 
+ the played ad should not be auto-cached",Boundary,2,1,1
+AutoCache/Multi AutoCache,ATCH-4,no auto-cached after re-initialization,no auto-cached after re-initialization,zero auto-cacheable placement,any,"1. initialize the app
+ 2. observe no ad auto-cached
+ 3. kill the app
+ 4. re-initialize the app",no ad must be auto-cached after re-initialization,Boundary,2,1,1
+AutoCache/Multi AutoCache,ATCH-5,single auto-cacheable placement must be autocached,single auto-cacheable placement must be autocached,1 auto-cacheable placement of each ad type,any,"1. initialize the app
+ 2. observe auto-cacheable ads
+ 3. repeat step 1-2 with each ad type",only auto-cacheable ads must be loaded,Basic,2,1,1
+AutoCache/Multi AutoCache,ATCH-6,multipleauto-cacheable placements must be auto-cached,multipleauto-cacheable placements must be auto-cached,"multiple auto-cacheable placements 
+ (1 placement of each ad type are autocacheable)",any,"1. initialize the app
+ 2. observe auto-cacheable ads",only auto-cacheable ads must be loaded,Basic,2,1,1
+AutoCache/Multi AutoCache,ATCH-7,play the auto-cacheable ad,play the auto-cacheable ad,"multiple auto-cacheable placements 
+ (1 placement of each ad type are autocacheable)",any,"1. initialize the app
+ 2. wait until all auto-cacheable ads are loaded
+ 3. play all auto-cached ads individually","/will_play_ad, /ads, and /report_ad must be called in sequence
+ 
+ the ad must be auto-cached",Functional,2,1,1
+AutoCache/Multi AutoCache,ATCH-8,load and play the non auto-cacheable ad,load and play the non auto-cacheable ad,"multiple auto-cacheable placements 
+ (1 placement of each ad type are autocacheable,
+ 1 placement of each ad type are non-autocacheable)",any,"1. initialize the app
+ 2.observe no ad auto-cached
+ 3. play all non auto-cacheable ad individually and close","/ads, /will_play_ad, and /report_ad must be called in sequence
+ 
+ the played non auto-cacheable ad should not be auto-cached",Functional,2,1,1
+AutoCache/Multi AutoCache,ATCH-9,play auto-cacheable ad while the auto-caching is loading,play auto-cacheable ad while the auto-caching is loading,"multiple auto-cacheable placements 
+ (1 placement of each ad type are autocacheable,
+ 1 placement of each ad type are non-autocacheable)",any,"1. initialize the app
+ 2. play an auto-cached ad while the auto-caching is loading","/will_play_ad, /ads, and /report_ad must be called in sequence
+ 
+ ad plays successfully
+ while auto-caching continues on
+ The played ad must be auto-cached",Functional,2,1,1
+AutoCache/Multi AutoCache,ATCH-10,play non auto-cacheable ad while the auto-caching is loading,play non auto-cacheable ad while the auto-caching is loading,"multiple auto-cacheable placements 
+ (1 placement of each ad type are autocacheable,
+ 1 placement of each ad type are non-autocacheable)",any,"1. initialize the app
+ 2. load and play an non auto-cached ad while the auto-caching is loading","/ads, /will_play_ad, and /report_ad must be called in sequence
+ 
+ ad is loaded and played successfully after all auto-cacheable placements are loaded
+ The played ad must not be auto-cached",Functional,2,1,1
+AutoCache/Multi AutoCache,ATCH-11,Interrupt auto-caching by putting in background,Interrupt auto-caching by putting in background,"multiple auto-cacheable placements 
+ (1 placement of each ad type are autocacheable,
+ 1 placement of each ad type are non-autocacheable)",any,"1. initialize the app
+ 2. put app in background while the auto-caching is loading
+ 3. bring the app in foreground","iOS: app pauses auto-caching in background and it resumes auto-caching when it is back in foreground
+ 
+ Android: app should continue to auto-caching in background
+ 
+ Windows: either one.. please record the behavior in result",Interruption,2,1,1
+AutoCache/Multi AutoCache,ATCH-12,Interrupt auto-caching by locking the device,Interrupt auto-caching by locking the device,"multiple auto-cacheable placements 
+ (1 placement of each ad type are autocacheable,
+ 1 placement of each ad type are non-autocacheable)",any,"1. initialize the app
+ 2. Lock the device while the auto-caching is loading
+ 3. Unlock the device and launch the app","auto-caching must be paused when the app is locked
+ App should resume auto-caching",Interruption,2,1,1
+AutoCache/Multi AutoCache,ATCH-13,Interrupt auto-caching by killing the app,Interrupt auto-caching by killing the app,"multiple auto-cacheable placements 
+ (1 placement of each ad type are autocacheable,
+ 1 placement of each ad type are non-autocacheable)",any,"1. initialize the app
+ 2. Kill the app while the auto-caching is loading
+ 3. Re-initialize the app","auto-caching must be paused when the app is killed
+ App should resume auto-caching",Interruption,2,1,1
+AutoCache/Multi AutoCache,ATCH-14,Interrupt the auto-caching by network disable,Interrupt the auto-caching by network disable,"multiple auto-cacheable placements 
+ (1 placement of each ad type are autocacheable,
+ 1 placement of each ad type are non-autocacheable)",any,"1. initialize the app
+ 2. disable data network while the auto-caching is loading
+ 3. enable data network","auto-caching must be paused when data network is disabled
+ auto-caching should be resumed when data network is enabled back",Interruption,2,1,1
+AutoCache/Multi AutoCache,ATCH-15,Auto-cached ad is playable after re-initialization,Auto-cached ad is playable after re-initialization,"multiple auto-cacheable placements 
+ (1 placement of each ad type are autocacheable,
+ 1 placement of each ad type are non-autocacheable)",any,"1. set all different type of ads as auto-cacheable
+ 2. initialize the app and wait until all ads are auto-cached
+ 3. kill the app and re-initialize the app
+ 4. play the auto-cached ads","all auto-cached ads are playable.
+ auto-cache should not be restarted",Functional,2,1,1
+AutoCache/Multi AutoCache,ATCH-16,auto-cache after network is restored,auto-cache after network is restored,multiple auto-cacheable placements (each type of ads),any,"1. set all different type of ads as auto-cacheable
+ 2. initialize the app
+ 3. Disable the data network
+ 4. play all auto-cached ads
+ 5. Enable the data network","Auto cacheble ads must not be auto-cached while the data network is disabled
+ Auto cacheable ads must be auto-cached after the data network is restored",Functional,2,1,1
+AutoCache/Multi AutoCache,ATCH-17,Play auto-cacheable ad while data network is disabled,Play auto-cacheable ad while data network is disabled,"multiple auto-cacheable placements 
+ (1 placement of each ad type are autocacheable,
+ 1 placement of each ad type are non-autocacheable)",any,"1. initialize the app
+ 2. wait for all auto-caching is done
+ 3. disable data network 
+ 4. play and close all auto-cached ads individually
+ 5. enable data network","The played auto-cacheable ads should not be auto-cached while the network is disabled
+ 
+ The played auto-cacheable ads should start auto-caching when data network is enabled back",Interruption,2,1,1
+AutoCache/Multi AutoCache,ATCH-18,"All auto-cacheable placements:
+ play all different types of ads","All auto-cacheable placements:
+ play all different types of ads",all auto-cacheable placements,any,"1. initialize the app
+ 2. wait until all auto-cacheable ads are loaded
+ 3. play all different types of ads","/will_play_ad, /ads, and /report_ad must be called in sequence
+ 
+ the played auto-cacheable ad should be re-loaded",Basic,2,1,1
+AutoCache/Multi AutoCache,ATCH-19,"All auto-cacheable placements:
+ more than 10 auto-cacheable placements","All auto-cacheable placements:
+ more than 10 auto-cacheable placements",all auto-cacheable placements (>10),any,1. initialize the app with more than 10 auto-cacheable placements,"All auto-cacheable placements are auto-cached successfully
+ All of them are playable",Boundary,2,1,1
+AutoCache/Multi AutoCache,ATCH-20,Auto-cacheable to Non auto-cacheable after auto-cached,Auto-cacheable to Non auto-cacheable after auto-cached,"multiple auto-cacheable placements 
+ (1 placement of each ad type are autocacheable,
+ 1 placement of each ad type are non-autocacheable)",any,"1. set all different type of ads as auto-cacheable
+ 2. initialize the app and wait until all ads are auto-cached
+ 3. set all auto-cached ads as non auto-cacheable
+ 4. Play the auto-cached ad","all auto-cached ads must be playable
+ After playing, the ad doesn't auto-cache",Functional,2,1,1
+AutoCache/Multi AutoCache,ATCH-21,Non auto-cacheable to auto-cacheable,Non auto-cacheable to auto-cacheable,multiple auto-cacheable placements (each type of ads),any,"1. set all different type of ads as non auto-cacheable
+ 2. initialize the app
+ 3. set all non auto-cached ads as auto-cacheable",all ads must be auto-cached after the auto-cacheable config is applied,Functional,2,1,1
+Ad ID and Fallback,ADID-1,"[iOS] Ad ID: enabled, Publish IDFV: enabled","iOS
+ Ad ID: enabled
+ Publish IDFV: enabled","iOS: newer than version10
+ Limit Ad Tracking: Disabled
+ Publish IDFV: Enabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"", ""idfa"", and ""idfv"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""idfa"" = Ad ID(IDFA) value
+ - ""idfv"" = IDFV value",Functional,2,1,1
+Ad ID and Fallback,ADID-2,"[iOS] Ad ID: enabled, Publish IDFV: disabled","iOS
+ Ad ID: enabled
+ Publish IDFV: disabled","iOS: newer than version10
+ Limit Ad Tracking: Disabled
+ Publish IDFV: Disabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"", ""idfa"", and ""idfv"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""idfa"" = Ad ID(IDFA) value
+ - ""idfv"": doesn't exist",Functional,2,1,1
+Ad ID and Fallback,ADID-3,"[iOS] Ad ID: disabled, Publish IDFV: enabled","iOS
+ Ad ID: disabled
+ Publish IDFV: enabled","iOS: newer than version10
+ Limit Ad Tracking: Enabled
+ Publish IDFV: Enabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"", ""idfa"", and ""idfv"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""idfa"" = all zeros and dashes
+ - ""idfv"" = IDFV value",Functional,2,1,1
+Ad ID and Fallback,ADID-4,"[iOS] Ad ID: disabled, Publish IDFV: disabled","iOS
+ Ad ID: disabled
+ Publish IDFV: disabled","iOS: newer than version10
+ Limit Ad Tracking: Enabled
+ Publish IDFV: Disabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"", ""idfa"", and ""idfv"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""idfa"" = all zeros and dashes
+ - ""idfv"" doesn't exist",Functional,2,1,1
+Ad ID and Fallback,ADID-5,"[iOS] Ad ID: enabled, Publish IDFV: enabled","iOS
+ Ad ID: enabled
+ Publish IDFV: enabled","iOS: version 9 or older
+ Limit Ad Tracking: Disabled
+ Publish IDFV: Enabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"", ""idfa"", and ""idfv"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""idfa"" = Ad ID(IDFA) value
+ - ""idfv"" = IDFV value",Functional,2,1,1
+Ad ID and Fallback,ADID-6,"[iOS] Ad ID: enabled, Publish IDFV: disabled","iOS
+ Ad ID: enabled
+ Publish IDFV: disabled","iOS: version 9 or older
+ Limit Ad Tracking: Disabled
+ Publish IDFV: Disabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"", ""idfa"", and ""idfv"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""idfa"" = Ad ID(IDFA) value
+ - ""idfv"": doesn't exist",Functional,2,1,1
+Ad ID and Fallback,ADID-7,"[iOS] Ad ID: disabled, Publish IDFV: enabled","iOS
+ Ad ID: disabled
+ Publish IDFV: enabled","iOS: version 9 or older
+ Limit Ad Tracking: Enabled
+ Publish IDFV: Enabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"", ""idfa"", and ""idfv"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""idfa"" = Ad ID(IDFA) value
+ - ""idfv"" = IDFV value",Functional,2,1,1
+Ad ID and Fallback,ADID-8,"[iOS] Ad ID: disabled, Publish IDFV: disabled","iOS
+ Ad ID: disabled
+ Publish IDFV: disabled","iOS: version 9 or older
+ Limit Ad Tracking: Enabled
+ Publish IDFV: Disabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"", ""idfa"", and ""idfv"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""idfa"" = Ad ID(IDFA) value
+ - ""idfv"" doesn't exist",Functional,2,1,1
+Ad ID and Fallback,ADID-9,"[Android] Ad ID: enabled, AndroidID: enabled","Android
+ Ad ID: enabled
+ AndroidID: enabled","Android with Google Service Installed
+ Opt out of Ads Personalization: Disabled
+ AndroidID: Enabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"" and ""gaid"", values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""gaid"" = Ad ID value
+ - ""android_id"" = """"",Functional,2,1,1
+Ad ID and Fallback,ADID-10,"[Android] Ad ID: enabled, AndroidID: disabled","Android
+ Ad ID: enabled
+ AndroidID: disabled","Android with Google Service Installed
+ Opt out of Ads Personalization: Disabled
+ AndroidID: Disabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"" and ""gaid"", values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""gaid"" = Ad ID value
+ - ""android_id"" = """"",Functional,2,1,1
+Ad ID and Fallback,ADID-11,"[Android] Ad ID: disabled, AndroidID: enabled","Android
+ Ad ID: disabled
+ AndroidID: enabled","Android with Google Service Installed
+ Opt out of Ads Personalization: Enabled
+ AndroidID: Enabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"" and ""gaid"", values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""gaid"" = Ad ID value
+ - ""android_id"" = """"",Functional,2,1,1
+Ad ID and Fallback,ADID-12,"[Android] Ad ID: disabled, AndroidID: disabled","Android
+ Ad ID: disabled
+ AndroidID: disabled","Android with Google Service Installed
+ Opt out of Ads Personalization: Enabled
+ AndroidID: Disabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"" and ""gaid"", values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""gaid"" = Ad ID value
+ - ""android_id"" = """"",Functional,2,1,1
+Ad ID and Fallback,ADID-13,"[Amazon] Ad ID: Enabled, AndroidID: enabled","Android Amazon
+ Ad ID: Enabled
+ AndroidID: enabled","Android Amazon
+ Advertising ID: Endabled
+ AndroidID: Enabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"" and ""amazon_advertising_id"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""amazon_advertising_id"" = Ad ID value",Functional,2,1,1
+Ad ID and Fallback,ADID-14,"[Amazon] Ad ID: Enabled, AndroidID: disabled","Android Amazon
+ Ad ID: Enabled
+ AndroidID: disabled","Android Amazon
+ Advertising ID: Endabled
+ AndroidID: Disabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"" and ""amazon_advertising_id"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""amazon_advertising_id"" = Ad ID value",Functional,2,1,1
+Ad ID and Fallback,ADID-15,"[Amazon] Ad ID: disabled, AndroidID: enabled","Android Amazon
+ Ad ID: disabled
+ AndroidID: enabled","Android Amazon
+ Advertising ID: Disabled
+ AndroidID: Enabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"" and ""amazon_advertising_id"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""amazon_advertising_id"" = Ad ID value",Functional,2,1,1
+Ad ID and Fallback,ADID-16,"[Amazon] Ad ID: disabled, AndroidID: disabled","Android Amazon
+ Ad ID: disabled
+ AndroidID: disabled","Android Amazon
+ Advertising ID: Disabled
+ AndroidID: Disabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"" and ""amazon_advertising_id"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""amazon_advertising_id"" = Ad ID value",Functional,2,1,1
+Ad ID and Fallback,ADID-17,[Android Chinese] AndroidID: enabled,"Android Chinese
+ AndroidID: enabled","Android Chinese Device
+ AndroidID: Enabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"" and ""android_id"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""android_id"" = Ad ID value",Functional,2,1,1
+Ad ID and Fallback,ADID-18,[Android Chinese] AndroidID: disabled,"Android Chinese
+ AndroidID: disabled","Android Chinese Device
+ AndroidID: Disabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"" and ""android_id"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"" = """"
+ - ""android_id"" doesn't exist",Functional,2,1,1
+Ad ID and Fallback,ADID-19,"[Windows] Ad ID: enabled, AndroidID: enabled","Windows
+ Ad ID: enabled
+ AndroidID: enabled","Windows
+ Settings -> Privacy: Disabled
+ ashwid: Enabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"", ""msaid"", and ""ashwid"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""msaid"" = Ad ID value
+ - ""ashwid"" = ASHWID value",Functional,2,1,1
+Ad ID and Fallback,ADID-20,"[Windows] Ad ID: enabled, AndroidID: disabled","Windows
+ Ad ID: enabled
+ AndroidID: disabled","Windows
+ Settings -> Privacy: Disabled
+ ashwid: Disabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"", ""msaid"", and ""ashwid"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""msaid"" = Ad ID value
+ - ""ashwid"" : doesn't exist",Functional,2,1,1
+Ad ID and Fallback,ADID-21,"[Windows] Ad ID: disabled, AndroidID: enabled","Windows
+ Ad ID: disabled
+ AndroidID: enabled","Windows
+ Settings -> Privacy: Enabled
+ ashwid: Enabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"", ""msaid"", and ""ashwid"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""msaid"" = """"
+ - ""ashwid"" = ASHWID value",Functional,2,1,1
+Ad ID and Fallback,ADID-22,"[Windows] Ad ID: enabled, AndroidID: enabled","Windows
+ Ad ID: enabled
+ AndroidID: enabled","Windows
+ Settings -> Privacy: Disabled
+ ashwid: Enabled",any,"1. initialize the app
+ 2. load ad
+ 3. play ad
+ 4. close ad
+ 5. Observe ""ifa"", ""msaid"", and ""ashwid"" values in /config, /ads, /will_play_ad, and /report_ad API Request Payload","API request payload:
+ - ""ifa"", ""msaid"" = Ad ID value
+ - ""ashwid"" = ASHWID value",Functional,2,1,1
